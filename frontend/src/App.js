@@ -1,11 +1,15 @@
-
+import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "./component/Home";
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      hello world
-    </div>
+    <>
+    <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </>
   );
 }
 
