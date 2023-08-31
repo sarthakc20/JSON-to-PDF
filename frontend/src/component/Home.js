@@ -8,13 +8,12 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { error, success } = useSelector((state) => state.createStudent);
+  const { error, success, student } = useSelector((state) => state.createStudent);
 
   const [name, setName] = useState("");
   const [major, setMajor] = useState("");
   const [state, setState] = useState("");
   const [zip, setZip] = useState();
-  const [address, setAddress] = useState([]);
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [city, setCity] = useState("");
@@ -27,10 +26,10 @@ const Home = () => {
 
     if (success) {
       alert("Student Created Successfully");
-      navigate("/students");
+      navigate(`/student/${student._id}`);
       dispatch({ type: CREATE_STUDENT_RESET });
     }
-  }, [dispatch, error, navigate, success]);
+  }, [dispatch, error, navigate, success, student._id]);
 
   const createStudentHandler = (e) => {
     e.preventDefault();

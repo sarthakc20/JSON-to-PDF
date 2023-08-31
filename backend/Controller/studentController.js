@@ -14,6 +14,20 @@ exports.createStudent = async (req, res) => {
   }
 };
 
+// Get Student
+exports.getSingleStudent = async (req, res) => {
+  try {
+    const student = await Student.findById(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      student,
+    });
+  } catch (error) {
+    res.send({ status: 400, success: false, message: error.message });
+  }
+};
+
 // Get all Students
 exports.getStudents = async (req, res) => {
   try {
