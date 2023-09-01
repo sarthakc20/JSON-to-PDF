@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
-import { clearErrors, createStudent } from "../action";
-import { CREATE_STUDENT_RESET } from "../constants";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { clearErrors, getSingleStudent, updateStudent } from "../action";
+import { UPDATE_STUDENT_RESET } from "../constants";
 
-const Home = () => {
+const UpdateStudent = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const { error, success, student } = useSelector((state) => state.createStudent);
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [major, setMajor] = useState("");
@@ -18,20 +17,15 @@ const Home = () => {
   const [address2, setAddress2] = useState("");
   const [city, setCity] = useState("");
 
-  useEffect(() => {
-    if (error) {
-      alert(error);
-      dispatch(clearErrors());
-    }
+  const { error: updateError, isUpdated } = useSelector(
+    (state) => state.updateStudent
+  );
 
-    if (success) {
-      alert("Student Created Successfully");
-      navigate(`/student/${student._id}`);
-      dispatch({ type: CREATE_STUDENT_RESET });
-    }
-  }, [dispatch, error, navigate, success, student._id]);
+  const { error, student } = useSelector((state) => state.getStudent);
 
-  const createStudentHandler = (e) => {
+  const { id } = useParams();
+
+  const updateStudentHandler = (e) => {
     e.preventDefault();
 
     const myForm = new FormData();
@@ -46,16 +40,46 @@ const Home = () => {
     myForm.set("address[0][address_2]", address2);
     myForm.set("address[0][city]", city);
 
-    dispatch(createStudent(myForm));
+    dispatch(updateStudent(id, myForm));
   };
+
+  useEffect(() => {
+    if (student && student._id !== id) {
+        dispatch(getSingleStudent(id));
+      } else {
+        setName(student.name);
+        setMajor(student.major);
+        setState(student.address[0].state);
+        setZip(student.address[0].zip);
+        setAddress1(student.address[0].address_1);
+        setAddress2(student.address[0].address_2);
+        setCity(student.address[0].city);
+      }
+
+    if (error) {
+        alert(error);
+        dispatch(clearErrors());
+      }
+  
+      if (updateError) {
+        alert(updateError);
+        dispatch(clearErrors());
+      }
+
+      if (isUpdated) {
+        alert("Student Updated Successfully");
+        navigate(`/student/${id}`);
+        dispatch({ type: UPDATE_STUDENT_RESET });
+      }
+  }, [dispatch, error, isUpdated, navigate, updateError, id])
 
   return (
     <>
       <section className="student">
         <div className="student-form">
-          <h2 className="form-title">Student Data</h2>
+          <h2 className="form-title">Update Student Data</h2>
 
-          <form onSubmit={createStudentHandler}>
+          <form onSubmit={updateStudentHandler}>
             <p>
               Name:
               <input
@@ -65,7 +89,6 @@ const Home = () => {
                 autoComplete="off"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Your Name"
               />
             </p>
 
@@ -78,7 +101,6 @@ const Home = () => {
                 autoComplete="off"
                 value={major}
                 onChange={(e) => setMajor(e.target.value)}
-                placeholder="Major"
               />
             </p>
 
@@ -91,7 +113,6 @@ const Home = () => {
                 autoComplete="off"
                 value={state}
                 onChange={(e) => setState(e.target.value)}
-                placeholder="State"
               />
               <input
                 type="number"
@@ -100,7 +121,6 @@ const Home = () => {
                 autoComplete="off"
                 value={zip}
                 onChange={(e) => setZip(e.target.value)}
-                placeholder="ZipCode"
               />
               <input
                 type="text"
@@ -109,7 +129,6 @@ const Home = () => {
                 autoComplete="off"
                 value={address1}
                 onChange={(e) => setAddress1(e.target.value)}
-                placeholder="Address Line 1"
               />
               <input
                 type="text"
@@ -118,7 +137,6 @@ const Home = () => {
                 autoComplete="off"
                 value={address2}
                 onChange={(e) => setAddress2(e.target.value)}
-                placeholder="Address Line 2"
               />
               <input
                 type="text"
@@ -126,20 +144,15 @@ const Home = () => {
                 id="city"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="City"
               />
             </p>
 
-            <button type="submit">Create Student</button>
+            <button type="submit">Update Student</button>
           </form>
         </div>
       </section>
-
-      <div>
-      <NavLink to={"/students"}>All Students</NavLink>
-      </div>
     </>
   );
 };
 
-export default Home;
+export default UpdateStudent;

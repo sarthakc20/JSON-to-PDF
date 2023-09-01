@@ -11,4 +11,6 @@ const student = require("./Routes/studentRoute");
 
 app.use("/api/v1", student);
 
+app.use(express.static(path.resolve(__dirname, "public")));
+
 module.exports = app;
