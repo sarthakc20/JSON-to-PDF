@@ -27,10 +27,9 @@ const Student = () => {
     setLoader(true);
     html2canvas(capture).then((canvas)=>{
       const imgData = canvas.toDataURL('img/png');
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const componentWidth = doc.internal.pageSize.getWidth();
-      const componentHeight = doc.internal.pageSize.getHeight();
-      doc.addImage(imgData, 'PNG', 40, 40, componentWidth, componentHeight);
+      const doc = new jsPDF({orientation: "vertical"});
+      // doc.text(75, 20, 'Student Information');
+      doc.addImage(imgData, 'PNG', 16, 30);
       setLoader(false);
       doc.save('studnet.pdf');
     })
@@ -39,18 +38,19 @@ const Student = () => {
   return (
     <>
       <div className="studentData">
-        <div>
+        <h1>Student Data</h1>
+        <div className="data">
           <h2>Name:</h2>
           <p>{student.name}</p>
         </div>
 
-        <div>
+        <div className="data">
           <h2>Major:</h2>
           <p>{student.major}</p>
         </div>
         
         {student.address && student.address.length > 0 && (
-        <div>
+        <div className="data">
           <h2>Address</h2>
 
           <div>
