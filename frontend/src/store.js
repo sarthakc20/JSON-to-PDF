@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { getAllStudentReducer, getStudentReducer, newStudentReducer, updateStudentReducer, uploadReducer } from "./reducer";
+import { getAllStudentReducer, getStudentReducer, newStudentReducer, sendMailReducer, updateStudentReducer, uploadReducer } from "./reducer";
 
 const reducer = combineReducers({
   createStudent: newStudentReducer,
@@ -9,6 +9,7 @@ const reducer = combineReducers({
   getAllStudent: getAllStudentReducer,
   updateStudent: updateStudentReducer,
   upload: uploadReducer,
+  sendMail: sendMailReducer,
 });
 
 let initialState = {};

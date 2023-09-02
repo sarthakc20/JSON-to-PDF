@@ -10,6 +10,9 @@ import {
   GET_STUDENT_FAIL,
   GET_STUDENT_REQUEST,
   GET_STUDENT_SUCCESS,
+  SEND_MAIL_FAIL,
+  SEND_MAIL_REQUEST,
+  SEND_MAIL_SUCCESS,
   UPDATE_STUDENT_FAIL,
   UPDATE_STUDENT_REQUEST,
   UPDATE_STUDENT_RESET,
@@ -170,4 +173,31 @@ export const uploadReducer = (state = { files: [] }, action) => {
   }
 };
 
-
+export const sendMailReducer = (state = { mail: {} }, action) => {
+  switch (action.type) {
+    case SEND_MAIL_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case SEND_MAIL_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        mail: action.payload.mail,
+      };
+    case SEND_MAIL_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};

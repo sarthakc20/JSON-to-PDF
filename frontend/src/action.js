@@ -2,14 +2,17 @@ import axios from "axios";
 import {
   ALL_STUDENTS_FAIL,
   ALL_STUDENTS_REQUEST,
-    ALL_STUDENTS_SUCCESS,
-    CLEAR_ERRORS,
+  ALL_STUDENTS_SUCCESS,
+  CLEAR_ERRORS,
   CREATE_STUDENT_FAIL,
   CREATE_STUDENT_REQUEST,
   CREATE_STUDENT_SUCCESS,
   GET_STUDENT_FAIL,
   GET_STUDENT_REQUEST,
   GET_STUDENT_SUCCESS,
+  SEND_MAIL_FAIL,
+  SEND_MAIL_REQUEST,
+  SEND_MAIL_SUCCESS,
   UPDATE_STUDENT_FAIL,
   UPDATE_STUDENT_REQUEST,
   UPDATE_STUDENT_SUCCESS,
@@ -84,7 +87,11 @@ export const updateStudent = (id, studentData) => async (dispatch) => {
       headers: { "Content-Type": "application/json" },
     };
 
-    const { data } = await axios.put(`/api/v1/students/${id}`, studentData, config);
+    const { data } = await axios.put(
+      `/api/v1/students/${id}`,
+      studentData,
+      config
+    );
 
     dispatch({
       type: UPDATE_STUDENT_SUCCESS,
@@ -106,11 +113,7 @@ export const uploadPdf = (pdfFiles) => async (dispatch) => {
       headers: { "Content-Type": "multipart/form-data" },
     };
 
-    const { data } = await axios.post(
-      `/api/v1/merge`,
-      pdfFiles,
-      config
-    );
+    const { data } = await axios.post(`/api/v1/merge`, pdfFiles, config);
 
     dispatch({
       type: UPLOAD_SUCCESS,
@@ -124,7 +127,24 @@ export const uploadPdf = (pdfFiles) => async (dispatch) => {
   }
 };
 
+// Send Mail
+export const sendMail = (mail) => async (dispatch) => {
+  try {
+    dispatch({ type: SEND_MAIL_REQUEST });
+
+    const config = { headers: { "Content-Type": "application/json" } };
+
+    const { data } = await axios.post(`/api/v1/sendmail`, mail, config);
+    dispatch({ type: SEND_MAIL_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: SEND_MAIL_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
-    dispatch({ type: CLEAR_ERRORS });
-  };
+  dispatch({ type: CLEAR_ERRORS });
+};
